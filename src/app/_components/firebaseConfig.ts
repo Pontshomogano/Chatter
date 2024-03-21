@@ -4,21 +4,24 @@ import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { GoogleAuthProvider } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
+import {getStorage} from 'firebase/storage'
 
 const firebaseConfig = {
-	apiKey: "AIzaSyAj3EBI14Fg4ijrTbs9QTT-fuQeIySOhVQ",
-	authDomain: "econjournalentry.firebaseapp.com",
-	projectId: "econjournalentry",
-	storageBucket: "econjournalentry.appspot.com",
-	messagingSenderId: "98449846111",
-	appId: "1:98449846111:web:56b828a677dc012c4510ea",
-	measurementId: "G-953MDCJYQV",
+  apiKey: "AIzaSyAP4aaUulIqLtURjTkuthdQnsShPZgvnKo",
+  authDomain: "chatter-ffdb4.firebaseapp.com",
+  projectId: "chatter-ffdb4",
+  storageBucket: "chatter-ffdb4.appspot.com",
+  messagingSenderId: "1024556856606",
+  appId: "1:1024556856606:web:f3e867cd47607115b3c50f",
+  measurementId: "G-3DRVS162E2"
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
 const db = getFirestore(app);
+const imageDb = getStorage(app);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
-export { auth, provider, db };
+
+export { auth, provider, db , imageDb};

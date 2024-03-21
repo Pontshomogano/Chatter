@@ -36,8 +36,29 @@
 
 .aboutSection {
 	padding-top: 50px;
-	// background-color: #FFF5E5;
 	padding-bottom: 50px;
+
+	.aboutSectionContainer{
+		// border: 1px solid red;
+
+		.aboutSectionRow{
+			.aboutSectionCol2{
+				// border: 1px solid red;
+
+				.image{
+					width: 100%; // Default width
+
+						@media (min-width: 768px) {
+							width: 70%; // Adjust for larger screens (e.g., tablets)
+						}
+
+						@media (min-width: 1024px) {
+							width: 50%; // Adjust for even larger screens (e.g., desktops)
+						}
+				}
+			}
+		}
+	}
 }
 
 .whyJoinSection {
@@ -74,26 +95,36 @@
 	display: flex;
 	align-items: center;
 
-	// .image{
-
-	// }
-
-	// .joinButton{
-	//
-	// }
 
 	.personSectionContainer {
-		// border: 1px solid red;
-
 		.personSectionRow {
+			min-height: 300px;
 			.col1 {
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+
 				.image {
 					border-radius: 50%;
-					overflow: hidden;
+				}
+
+				@media(max-width: 776px){
+					margin-bottom: 30px;
 				}
 			}
 
 			.col2 {
+
+				@media(max-width: 776px){
+					padding-left: 30px;
+					padding-right: 30px;
+					text-align: center;
+					// display: flex;
+					// justify-content: center;
+				}
+
+
 				h6 {
 					margin-top: 40px;
 					font-weight: bold;
@@ -120,29 +151,28 @@
 	.writeSectionContainer {
 		.writeSectionRow {
 			.col1 {
-				.imageDivisionRow {
-					.imageDivisionRowCol1 {
-						.imageRow {
-							.image {
-								border-radius: 50%;
-								overflow: hidden;
-								padding: 30px;
-							}
-						}
-					}
-					.imageDivisionRowCol2 {
-						.imageRow {
-							width: 100%;
-							height: 100%;
-							display: flex;
-							align-items: center;
-							flex-direction: column;
-							justify-content: center;
+				.imageDivisionRowCol1 {
+					display: flex;
+					flex-direction: column;
+					justify-content: center;
+					align-items: center;
+					border: 1px solid tan;
 
-							.image {
-								border-radius: 50%;
-							}
-						}
+					.image {
+						border-radius: 50%;
+						overflow: hidden;
+					}
+				}
+				.imageDivisionRowCol2 {
+					
+					display: flex;
+					flex-direction: column;
+					justify-content: center;
+					align-items: center;
+					border: 1px solid tan;
+
+					.image {
+						border-radius: 50%;
 					}
 				}
 			}

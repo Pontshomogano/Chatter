@@ -1,19 +1,12 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
-import Button from "@mui/material/Button";
 import List from "@mui/material/List";
 import Divider from "@mui/material/Divider";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
 import MenuIcon from "@mui/icons-material/Menu";
-import HomeIcon from "@mui/icons-material/Home";
-import InfoIcon from "@mui/icons-material/Info";
-import PermContactCalendarIcon from "@mui/icons-material/PermContactCalendar";
 
 // icons:
 import { IoPersonOutline } from "react-icons/io5";
@@ -25,16 +18,38 @@ import { FaRegEnvelopeOpen } from "react-icons/fa6";
 import { MdInsertChartOutlined } from "react-icons/md";
 import { GrLineChart } from "react-icons/gr";
 
+// firebase:
+import { signOut } from 'firebase/auth'; // Import Firebase Auth functions
+import { auth } from "./firebaseConfig";
+import { useRouter } from "next/navigation";
+
+import  { forwardRef, useImperativeHandle } from "react";
+
 // styles:
 import Styles from "./_styles/sideNavbar.module.scss";
 
-const SideNavbar = () => {
+const SideNavbar = forwardRef((props, ref) => {
+	const router = useRouter();
 	const [state, setState] = React.useState({
 		top: false,
 		left: false,
 		bottom: false,
 		right: false,
 	});
+
+	const handleLinkClick = (urlname: string) =>{
+		router.push(`/${urlname}`);
+	}
+
+	// logout function:
+	const handleLogout =  async () =>{
+		try {
+			await signOut(auth);
+			router.push('/signin');
+		} catch (error) {
+			console.error('Error signing out:', error);
+		}
+	}
 
 	const toggleDrawer = (anchor: any, open: any) => (event: any) => {
 		if (
@@ -57,17 +72,6 @@ const SideNavbar = () => {
 			onKeyDown={toggleDrawer(anchor, false)}
 		>
 			<List className={`${Styles.list}`}>
-				{/* {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-                    <ListItem key={text} disablePadding>
-                        <ListItemButton>
-                            <ListItemIcon>
-                                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                            </ListItemIcon>
-                            <ListItemText primary={text} />
-                        </ListItemButton>
-                    </ListItem>
-                ))} */}
-
 				<ListItem disablePadding>
 					<ListItemButton>
 						&emsp;&emsp;
@@ -85,7 +89,7 @@ const SideNavbar = () => {
 					</ListItemButton>
 				</ListItem>
 				<ListItem disablePadding>
-					<ListItemButton>
+					<ListItemButton onClick={()=>{handleLinkClick('feed')}}>
 						&emsp;&emsp;&emsp;
 						<CgFeed></CgFeed>
 						&nbsp;&nbsp;
@@ -155,7 +159,7 @@ const SideNavbar = () => {
 				</ListItem>
 
 				<ListItem disablePadding>
-					<ListItemButton>
+					<ListItemButton onClick={()=>{handleLinkClick('profile')}}>
 						&emsp;&emsp;&emsp;
 						<IoPersonOutline></IoPersonOutline>
 						&nbsp;&nbsp;
@@ -176,10 +180,13 @@ const SideNavbar = () => {
 				<ListItem disablePadding>
 					<ListItemButton>
 						&emsp;&emsp;
-						<ListItemText
-							className={`${Styles.logoutbutton}`}
-							primary={"Logout"}
-						/>
+						{/* <Link> */}
+							<ListItemText onClick={handleLogout}
+								className={`${Styles.logoutbutton}`}
+								primary={"Logout"}
+							/>
+						{/* </Link> */}
+						
 					</ListItemButton>
 				</ListItem>
 			</List>
@@ -188,22 +195,11 @@ const SideNavbar = () => {
 
 	return (
 		<div className={`${Styles.navbar}`}>
-			{/* {['left', 'right', 'top', 'bottom'].map((anchor) => (
-                <React.Fragment key={anchor}>
-                    <Button onClick={toggleDrawer(anchor, true)}>{anchor}</Button>
-                    <Drawer
-                        anchor={anchor}
-                        open={state[anchor]}
-                        onClose={toggleDrawer(anchor, false)}
-                    >
-                        {list(anchor)}
-                    </Drawer>
-                </React.Fragment>
-            ))} */}
-
-			<MenuIcon onClick={toggleDrawer("left", true)} />
+			
+			<MenuIcon className={Styles.menuIcon} onClick={toggleDrawer("left", true)} />
 
 			<Drawer
+				className={Styles.drawer}
 				anchor={"left"}
 				open={state["left"]}
 				onClose={toggleDrawer("left", false)}
@@ -212,6 +208,6 @@ const SideNavbar = () => {
 			</Drawer>
 		</div>
 	);
-};
+});
 
 export default SideNavbar;

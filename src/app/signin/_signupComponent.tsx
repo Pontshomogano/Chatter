@@ -3,12 +3,12 @@ import {
 	Form,
 	FormGroup,
 	Button,
-	Container,
 	Col,
 	Row,
-	Tab,
 } from "react-bootstrap";
-import { FaUser, FaEnvelope, FaLock } from "react-icons/fa";
+import { auth, provider } from "../_components/firebaseConfig";
+import { getFirestore, collection, addDoc , doc, setDoc} from 'firebase/firestore';
+import { db } from "../_components/firebaseConfig";
 import Styles from "../_styles/SigninPage/SignupComponent.module.scss";
 import { useRouter } from "next/navigation";
 import { FcGoogle } from "react-icons/fc";
@@ -19,6 +19,8 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+
 
 const schema = yup.object().shape({
 	email: yup.string().email("Invalid email").required("Email is required"),
@@ -32,6 +34,7 @@ const schema = yup.object().shape({
 	confirmpassword: yup.string().required("Please confirm your password"),
 }); // end of schema
 
+// start of main function:
 const SignupComponent: React.FC = () => {
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -44,8 +47,38 @@ const SignupComponent: React.FC = () => {
 	const router = useRouter();
 
 	// Submission function:
-	const onSubmit = () => {
-		//
+	const onSubmit = async (data: any) => {
+		setIsLoading(true);
+
+		createUserWithEmailAndPassword(auth, data.email, data.password)
+		.then( async (userCredential: any) => {
+			// Signed up 
+
+			try {
+				// After successful signup, extract user information from the auth object (excluding password)
+				const user = userCredential.user;
+				const userData = {
+					uid: user.uid,
+					email: user.email,
+					firstname: data.firstname,
+					lastname: data.lastname,
+					type: data.joiningas
+				};
+
+				const userRef = doc(db, 'users', userData.uid); // Use doc() for a single document
+				await setDoc(userRef, userData);
+				router.push('/feed');
+
+			} catch (error: unknown) {
+				console.log(error);
+			} finally {
+				setIsLoading(false);
+			}
+
+		}).catch((error: any) => {
+			const errorCode = error.code;
+			const errorMessage = error.message;
+		});
 	};
 
 	return (
@@ -177,10 +210,7 @@ const SignupComponent: React.FC = () => {
 					&nbsp; Sign up with Google
 				</Button>
 
-				<Button className={`${Styles.FacbookButton}`}>
-					<FaFacebookF />
-					&nbsp; Sign up with Facebook
-				</Button>
+				
 			</Row>
 		</div>
 	);

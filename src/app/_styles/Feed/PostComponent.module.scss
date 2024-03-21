@@ -1,6 +1,11 @@
 .card {
 	width: 100%;
 
+	.link{
+		text-decoration: none;
+		color: black;
+	}
+
 	.cardBodyUserinfo {
 		display: flex;
 		flex-direction: row;
@@ -21,6 +26,7 @@
 	.cardBodyPostDetails {
 		.cardBodyPostDetailsTitle {
 			font-weight: bold;
+			font-size: 35px;
 		}
 	}
 }
